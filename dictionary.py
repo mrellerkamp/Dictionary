@@ -59,12 +59,17 @@ while prompt <= 2:
             num = int(raw_input('Select a number: '))
         
         chosen_definition = definitions[num - 1]['definition']
-        print 'This word has been added to the list.'
+
+        valid_word = word.capitalize()
         
-        c.execute("INSERT INTO words VALUES (NULL,?,?)", (word, chosen_definition))
-        
-        conn.commit()
-        
+        try:
+            c.execute("INSERT INTO words VALUES (NULL,?,?)", (valid_word, chosen_definition)) 
+            conn.commit()
+            print 'This word has been added to the list.'
+        except sqlite3.Error as e:
+            print(e)
+            print 'The word could not be added to the list.'
+            
         conn.close()
     else:
         print 'Try again.'
